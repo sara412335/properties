@@ -21,12 +21,20 @@ jobs:
     - name: 📤 Push sur DockerHub
       run: docker push ${{ secrets.DOCKER_USERNAME }}/mon-site-html
 
-    - name: 🚀 Déploiement sur Kubernetes
-      uses: azure/k8s-deploy@v4
-      with:
-        manifests: |
-          ./k8s/deployment.yaml
-          ./k8s/service.yaml
-        images: ${{ secrets.DOCKER_USERNAME }}/mon-site-html
-        kubectl-version: 'latest'
+    - name: 🧰 Installer kubectl
+      run: |
+        curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        sudo mv kubectl /usr/local/bin/
+
+    - name: 📄 Configurer kubeconfig
+      run: |
+        echo "${{ secrets.KUBECONFIG_DATA }}" > kubeconfig.yaml
+        export KUBECONFIG=$PWD/kubeconfig.yaml
+        kubectl config get-contexts
+
+    - name: 🚀 Déployer sur AKS
+      run: |
+        export KUBECONFIG=$PWD/kubeconfig.yaml
+        kubectl apply -f k8s/
 
