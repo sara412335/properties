@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mon-site-html-service
+spec:
+  selector:
+    app: mon-site-html
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer  # ou NodePort pour minikube

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mon-site-html
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mon-site-html
+  template:
+    metadata:
+      labels:
+        app: mon-site-html
+    spec:
+      containers:
+      - name: mon-site-html
+        image: saraouazza/mon-site-html
+        ports:
+        - containerPort: 80
