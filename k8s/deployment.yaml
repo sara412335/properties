@@ -17,3 +17,4 @@ spec:
         image: saraouazza/mon-site-html
         ports:
         - containerPort: 80
+        
